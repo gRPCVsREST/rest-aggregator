@@ -1,6 +1,7 @@
 package org.grpcvsrest.raggr.rest;
 
 import org.grpcvsrest.raggr.datapump.DataPump;
+import org.grpcvsrest.raggr.repo.InMemoryContentRepo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class InternalControllerTest {
 
     @MockBean(name = "datapumpB")
     private DataPump dataPumpB;
+
+    @MockBean
+    private InMemoryContentRepo repo;
 
     @Autowired
     private MockMvc mockMvc;
