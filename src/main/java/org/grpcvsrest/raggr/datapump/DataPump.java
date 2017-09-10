@@ -1,12 +1,9 @@
 package org.grpcvsrest.raggr.datapump;
 
-import org.apache.commons.lang3.StringUtils;
 import org.grpcvsrest.raggr.datasource.Content;
 import org.grpcvsrest.raggr.datasource.Datasource;
 import org.grpcvsrest.raggr.repo.AggregatedContent;
 import org.grpcvsrest.raggr.repo.InMemoryContentRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 public class DataPump {
 
