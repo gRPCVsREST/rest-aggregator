@@ -7,9 +7,13 @@ import com.google.common.base.MoreObjects;
 import java.util.Objects;
 
 public class AggregatedContent {
+    @JsonProperty("id")
     private final Integer id;
+    @JsonProperty("type")
     private final String type;
+    @JsonProperty("content")
     private final String content;
+    @JsonProperty("original_id")
     private final Integer originalId;
 
     @JsonCreator
