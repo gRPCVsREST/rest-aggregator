@@ -11,14 +11,17 @@ public class InMemoryContentRepoTest {
     private static final int CONTENT_ID = 1;
     private static final String CONTENT_TYPE = "Pokemon";
     private static final String CONTENT_STRING = "foobar";
+    private static final int ORIGINAL_ID = 42;
     private static final AggregatedContent NEW_CONTENT_RECORD = new AggregatedContent(
             null,
             CONTENT_TYPE,
-            CONTENT_STRING);
+            CONTENT_STRING,
+            ORIGINAL_ID);
     private static final AggregatedContent SAVED_CONTENT_RECORD = new AggregatedContent(
-            1,
+            CONTENT_ID,
             CONTENT_TYPE,
-            CONTENT_STRING);
+            CONTENT_STRING,
+            ORIGINAL_ID);
 
 
     private InMemoryContentRepo repo;
