@@ -1,22 +1,16 @@
 package org.grpcvsrest.raggr.datasource;
 
 import com.google.common.collect.ImmutableMap;
+import org.grpcvsrest.raggr.MockitoTest;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
-import org.mockito.quality.Strictness;
 import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-public class DatasourceTest {
-
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
+public class DatasourceTest extends MockitoTest{
 
     private static final String FAKE_URL = "fakeUrl";
     private static final int CONTENT_ID = 42;
