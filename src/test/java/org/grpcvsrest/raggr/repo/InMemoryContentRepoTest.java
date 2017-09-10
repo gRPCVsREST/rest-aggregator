@@ -1,6 +1,5 @@
 package org.grpcvsrest.raggr.repo;
 
-import org.grpcvsrest.raggr.datasource.AggregatedContent;
 import org.junit.Before;
 import org.junit.Test;
 

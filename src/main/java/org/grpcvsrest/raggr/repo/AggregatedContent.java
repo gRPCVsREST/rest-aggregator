@@ -1,4 +1,4 @@
-package org.grpcvsrest.raggr.datasource;
+package org.grpcvsrest.raggr.repo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
