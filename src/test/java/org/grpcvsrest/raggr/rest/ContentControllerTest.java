@@ -46,6 +46,23 @@ public class ContentControllerTest {
 
     }
 
+    @Test
+    public void test404() throws Exception {
+        // given
+        recordMissing();
+
+        // when
+        mockMvc.perform(post("/content/1")
+        ) // then
+                .andExpect(status().is(404));
+
+    }
+
+    private void recordMissing() {
+        when(repo.find(CONTENT_ID)).thenReturn(null);
+    }
+
+
     private String expectedContent() throws IOException {
         return Resources.toString(
                 Resources.getResource("aggregated_content.json"),
