@@ -24,4 +24,8 @@ public class InMemoryContentRepo {
         contents.put(contentRecord.getId(), contentRecord);
         return contentRecord;
     }
+
+    public int size() {
+        return contents.size();
+    }
 }

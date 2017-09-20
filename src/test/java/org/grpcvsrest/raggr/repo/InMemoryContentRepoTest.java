@@ -31,6 +31,30 @@ public class InMemoryContentRepoTest {
     }
 
     @Test
+    public void testSize() {
+        // given empty repo
+        // when
+        int size = repo.size();
+        // then
+        assertThat(size).isEqualTo(0);
+
+        // and given
+        repo.save(NEW_CONTENT_RECORD);
+        // when
+        size = repo.size();
+        // then
+        assertThat(size).isEqualTo(1);
+
+
+        // and given
+        repo.save(NEW_CONTENT_RECORD);
+        // when
+        size = repo.size();
+        // then
+        assertThat(size).isEqualTo(2);
+    }
+
+    @Test
     public void testSaveNew() {
         // when
         AggregatedContent result = repo.find(CONTENT_ID);
