@@ -16,8 +16,7 @@ import java.io.IOException;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
 @RunWith(SpringRunner.class)
@@ -37,11 +36,13 @@ public class ContentControllerTest {
     public void testExistingContent() throws Exception {
         // given
         recordExists();
+        repoSize(15);
 
         // when
         mockMvc.perform(post("/content/1")
         ) // then
                 .andExpect(status().is(200))
+                .andExpect(header().string("X-Total-Count", "15"))
                 .andExpect(content().json(expectedContent()));
 
     }
@@ -62,7 +63,6 @@ public class ContentControllerTest {
         when(repo.find(CONTENT_ID)).thenReturn(null);
     }
 
-
     private String expectedContent() throws IOException {
         return Resources.toString(
                 Resources.getResource("aggregated_content.json"),
@@ -71,6 +71,10 @@ public class ContentControllerTest {
 
     private void recordExists() {
         when(repo.find(CONTENT_ID)).thenReturn(new AggregatedContent(CONTENT_ID, POKEMON, PIKACHU, ORIGINAL_ID));
+    }
+
+    private void repoSize(int mockSize) {
+        when(repo.size()).thenReturn(mockSize);
     }
 
 }

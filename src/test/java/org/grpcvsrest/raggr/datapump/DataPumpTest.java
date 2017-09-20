@@ -11,11 +11,10 @@ import org.mockito.Mock;
 
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class DataPumpTest extends MockitoTest{
 
-    public static final String POKEMON = "Pokemon";
+    private static final String POKEMON = "Pokemon";
     @Mock
     private InMemoryContentRepo repo;
     @Mock
