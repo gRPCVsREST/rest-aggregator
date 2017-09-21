@@ -10,12 +10,19 @@ public class InMemoryContentRepoTest {
     private static final int CONTENT_ID = 1;
     private static final String CONTENT_TYPE = "Pokemon";
     private static final String CONTENT_STRING = "foobar";
+    private static final String CONTENT_STRING_2 = "foobar2";
     private static final int ORIGINAL_ID = 42;
+    private static final int ORIGINAL_ID_2 = 43;
     private static final AggregatedContent NEW_CONTENT_RECORD = new AggregatedContent(
             null,
             CONTENT_TYPE,
             CONTENT_STRING,
             ORIGINAL_ID);
+    private static final AggregatedContent NEW_CONTENT_RECORD_2 = new AggregatedContent(
+            null,
+            CONTENT_TYPE,
+            CONTENT_STRING_2,
+            ORIGINAL_ID_2);
     private static final AggregatedContent SAVED_CONTENT_RECORD = new AggregatedContent(
             CONTENT_ID,
             CONTENT_TYPE,
@@ -50,8 +57,8 @@ public class InMemoryContentRepoTest {
         repo.save(NEW_CONTENT_RECORD);
         // when
         size = repo.size();
-        // then
-        assertThat(size).isEqualTo(2);
+        // then no additional records are saved
+        assertThat(size).isEqualTo(1);
     }
 
     @Test
@@ -79,6 +86,11 @@ public class InMemoryContentRepoTest {
 
         // and when
         AggregatedContent result = repo.save(SAVED_CONTENT_RECORD);
+        // then
+        assertThat(result).isEqualTo(SAVED_CONTENT_RECORD);
+
+        // and when
+        result = repo.save(NEW_CONTENT_RECORD);
         // then
         assertThat(result).isEqualTo(SAVED_CONTENT_RECORD);
 
