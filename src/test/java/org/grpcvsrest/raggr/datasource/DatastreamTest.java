@@ -10,8 +10,8 @@ import static org.mockito.BDDMockito.willReturn;
 
 public class DatastreamTest extends MockitoTest{
 
-    public static final Content CONTENT_1 = new Content(1, "foo", 2);
-    public static final Content CONTENT_2 = new Content(2, "bar", null);
+    private static final Content CONTENT_1 = new Content(1, "foo", 2);
+    private static final Content CONTENT_2 = new Content(2, "bar", null);
     @Mock
     private Datasource datasource;
 
