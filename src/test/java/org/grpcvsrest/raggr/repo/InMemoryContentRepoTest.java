@@ -59,6 +59,13 @@ public class InMemoryContentRepoTest {
         size = repo.size();
         // then no additional records are saved
         assertThat(size).isEqualTo(1);
+
+        // and given
+        repo.save(NEW_CONTENT_RECORD_2);
+        // when
+        size = repo.size();
+        // then one extra record is saved
+        assertThat(size).isEqualTo(2);
     }
 
     @Test

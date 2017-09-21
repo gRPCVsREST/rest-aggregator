@@ -5,6 +5,9 @@ import org.grpcvsrest.raggr.MockitoTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,11 +42,32 @@ public class DatasourceTest extends MockitoTest{
         assertThat(result).isEqualTo(EXPECTED_CONTENT);
     }
 
+    @Test
+    public void testFetch404() {
+        // given
+        resourceMissing();
+
+        // when
+        Content result = datasource.fetch(CONTENT_ID);
+
+        // then
+        assertThat(result).isNull();
+    }
+
+
     private void resourceExists() {
-        when(restTemplate.getForObject(
+        when(restTemplate.getForEntity(
                 FAKE_URL+"/content/{content_id}",
                 Content.class,
                 ImmutableMap.of("content_id", CONTENT_ID)
-        )).thenReturn(EXPECTED_CONTENT);
+        )).thenReturn(new ResponseEntity<>(EXPECTED_CONTENT, HttpStatus.OK));
+    }
+
+    private void resourceMissing() {
+        when(restTemplate.getForEntity(
+                FAKE_URL+"/content/{content_id}",
+                Content.class,
+                ImmutableMap.of("content_id", CONTENT_ID)
+        )).thenReturn(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
