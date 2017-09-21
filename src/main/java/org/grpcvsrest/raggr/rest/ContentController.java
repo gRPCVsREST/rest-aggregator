@@ -1,7 +1,7 @@
 package org.grpcvsrest.raggr.rest;
 
 import org.grpcvsrest.raggr.repo.AggregatedContent;
-import org.grpcvsrest.raggr.repo.InMemoryContentRepo;
+import org.grpcvsrest.raggr.repo.InMemoryAggregatedContentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +12,10 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 public class ContentController {
 
-    private final InMemoryContentRepo repo;
+    private final InMemoryAggregatedContentRepo repo;
 
     @Autowired
-    public ContentController(InMemoryContentRepo repo) {
+    public ContentController(InMemoryAggregatedContentRepo repo) {
         this.repo = repo;
     }
 

@@ -11,6 +11,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class DatasourceTest extends MockitoTest{
@@ -41,6 +42,33 @@ public class DatasourceTest extends MockitoTest{
         // then
         assertThat(result).isEqualTo(EXPECTED_CONTENT);
     }
+
+    @Test
+    public void testFetch_Caching() {
+        // given
+        resourceExists();
+
+        // when
+        Content result = datasource.fetch(CONTENT_ID);
+        // then
+        assertThat(result).isEqualTo(EXPECTED_CONTENT);
+        restTemplateCalledOnce();
+
+        // when
+        result = datasource.fetch(CONTENT_ID);
+        // then
+        assertThat(result).isEqualTo(EXPECTED_CONTENT);
+        restTemplateCalledOnce(); // still called only once
+    }
+
+    private ResponseEntity<Content> restTemplateCalledOnce() {
+        return verify(restTemplate).getForEntity(
+                FAKE_URL+"/content/{content_id}",
+                Content.class,
+                ImmutableMap.of("content_id", CONTENT_ID)
+        );
+    }
+
 
     @Test
     public void testFetch404() {

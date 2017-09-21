@@ -3,7 +3,7 @@ package org.grpcvsrest.raggr.rest;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import org.grpcvsrest.raggr.repo.AggregatedContent;
-import org.grpcvsrest.raggr.repo.InMemoryContentRepo;
+import org.grpcvsrest.raggr.repo.InMemoryAggregatedContentRepo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class ContentControllerTest {
     private static final int ORIGINAL_ID = 42;
 
     @MockBean
-    private InMemoryContentRepo repo;
+    private InMemoryAggregatedContentRepo repo;
 
     @Autowired
     private MockMvc mockMvc;

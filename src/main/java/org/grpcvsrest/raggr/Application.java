@@ -2,7 +2,7 @@ package org.grpcvsrest.raggr;
 
 import org.grpcvsrest.raggr.datapump.DataPump;
 import org.grpcvsrest.raggr.datasource.Datasource;
-import org.grpcvsrest.raggr.repo.InMemoryContentRepo;
+import org.grpcvsrest.raggr.repo.InMemoryAggregatedContentRepo;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -30,7 +30,7 @@ public class Application {
 
     @Bean("datapumpA")
     public DataPump dataPumpA(
-            InMemoryContentRepo repo,
+            InMemoryAggregatedContentRepo repo,
             @Qualifier("datasourceA") Datasource datasource,
             @Value("${content_type.a}") String contentType) {
         return new DataPump(repo, datasource, contentType);
@@ -38,7 +38,7 @@ public class Application {
 
     @Bean("datapumpB")
     public DataPump dataPumpB(
-            InMemoryContentRepo repo,
+            InMemoryAggregatedContentRepo repo,
             @Qualifier("datasourceB") Datasource datasource,
             @Value("${content_type.b}") String contentType) {
         return new DataPump(repo, datasource, contentType);
