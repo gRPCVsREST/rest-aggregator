@@ -10,8 +10,6 @@ public class Datasource {
     private final String urlPrefix;
     private final InMemoryContentRepo repo = new InMemoryContentRepo();
 
-    private volatile Integer lastContentId;
-
     public Datasource(RestTemplate restTemplate, String url) {
         this.restTemplate = restTemplate;
         urlPrefix = url+"/content/";
@@ -36,7 +34,4 @@ public class Datasource {
         return contentEntity.getBody();
     }
 
-    public String getUrlPrefix() {
-        return urlPrefix;
-    }
 }
