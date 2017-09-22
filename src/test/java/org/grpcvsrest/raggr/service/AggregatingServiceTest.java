@@ -94,11 +94,14 @@ public class AggregatingServiceTest extends MockitoTest{
 
 
     private void streamAActive() {
-        doReturn(CONTENT_A, null).when(streamA).next();
+        doReturn(CONTENT_A).doReturn(null)
+                .when(streamA).next();
 
     }
 
     private void streamBActive() {
-        doReturn(CONTENT_B, null).when(streamB).next();
+
+        doReturn(CONTENT_B).doReturn(null)
+                .when(streamB).next();
     }
 }
