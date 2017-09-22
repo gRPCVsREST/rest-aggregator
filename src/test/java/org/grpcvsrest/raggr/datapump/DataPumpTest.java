@@ -4,7 +4,7 @@ import org.grpcvsrest.raggr.MockitoTest;
 import org.grpcvsrest.raggr.datasource.Content;
 import org.grpcvsrest.raggr.datasource.Datasource;
 import org.grpcvsrest.raggr.repo.AggregatedContent;
-import org.grpcvsrest.raggr.repo.InMemoryContentRepo;
+import org.grpcvsrest.raggr.repo.InMemoryAggregatedContentRepo;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,7 +16,7 @@ public class DataPumpTest extends MockitoTest{
 
     private static final String POKEMON = "Pokemon";
     @Mock
-    private InMemoryContentRepo repo;
+    private InMemoryAggregatedContentRepo repo;
     @Mock
     private Datasource datasource;
 
