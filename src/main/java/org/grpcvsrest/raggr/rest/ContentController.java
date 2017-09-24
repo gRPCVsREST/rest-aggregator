@@ -17,7 +17,7 @@ public class ContentController {
         this.aggregatingService = aggregatingService;
     }
 
-    @PostMapping("/content/{id}")
+    @GetMapping("/content/{id}")
     public ResponseEntity<AggregatedContentResponse> content(@PathVariable("id") int id) {
         AggregatedContent aggregatedContent = aggregatingService.fetch(id);
         if (aggregatedContent == null) {

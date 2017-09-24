@@ -5,6 +5,8 @@ import org.grpcvsrest.raggr.datasource.Datastream;
 import org.grpcvsrest.raggr.repo.AggregatedContent;
 import org.grpcvsrest.raggr.repo.InMemoryAggregatedContentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +18,11 @@ public class AggregatingService {
     private final InMemoryAggregatedContentRepo repo = new InMemoryAggregatedContentRepo();
 
     @Autowired
-    public AggregatingService(Datastream streamA, Datastream streamB, String categoryA, String categoryB) {
+    public AggregatingService(
+            @Qualifier("datastreamA") Datastream streamA,
+            @Qualifier("datastreamB") Datastream streamB,
+            @Value("${content_type.a}") String categoryA,
+            @Value("${content_type.b}") String categoryB) {
         this.streamA = streamA;
         this.streamB = streamB;
         this.categoryA = categoryA;

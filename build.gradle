@@ -43,18 +43,26 @@ bootRepackage {
 }
 
 task buildDocker(type: DockerBuildImage) {
-    dependsOn jar
+    dependsOn bootRepackage
     inputDir = project.projectDir
     tag = 'restaggregator:latest'
 }
 
 task tagDocker(type: Exec) {
     dependsOn buildDocker
-    commandLine 'docker', 'tag', 'restaggregator:latest', 'gcr.io/rgrpcvsrest/restaggregator:latest'
+    commandLine 'docker', 'tag', 'restaggregator:latest', 'gcr.io/alien-fold-180922/restaggregator:latest'
 }
-
 
 task pushDocker(type: Exec) {
     dependsOn tagDocker
-    commandLine 'gcloud', 'docker', '--', 'push', 'gcr.io/rgrpcvsrest/restaggregator:latest'
+    commandLine 'gcloud', 'docker', '--', 'push', 'gcr.io/alien-fold-180922/restaggregator:latest'
+}
+
+task deploy(type: Exec) {
+    commandLine 'kubectl', 'create', '-f', 'k8s/rest-aggregator.yaml'
+}
+
+
+task undeploy(type: Exec) {
+    commandLine 'kubectl', 'delete', '-f', 'k8s/rest-aggregator.yaml'
 }

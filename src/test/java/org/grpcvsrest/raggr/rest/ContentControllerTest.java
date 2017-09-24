@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.io.IOException;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +40,7 @@ public class ContentControllerTest {
         recordExists();
 
         // when
-        mockMvc.perform(post("/content/1")
+        mockMvc.perform(get("/content/1")
         ) // then
                 .andExpect(status().is(200))
                 .andExpect(content().json(expectedContent()));
@@ -52,7 +53,7 @@ public class ContentControllerTest {
         recordMissing();
 
         // when
-        mockMvc.perform(post("/content/1")
+        mockMvc.perform(get("/content/1")
         ) // then
                 .andExpect(status().is(404));
 
