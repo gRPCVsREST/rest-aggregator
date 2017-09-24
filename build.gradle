@@ -1,13 +1,21 @@
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
 buildscript {
     repositories {
         jcenter()
     }
+    dependencies {
+        classpath 'com.bmuschko:gradle-docker-plugin:3.1.0'
+    }
+
 }
 plugins {
     id 'java'
     id 'idea'
     id 'org.springframework.boot' version '1.5.6.RELEASE'
 }
+
+apply plugin: 'com.bmuschko.docker-remote-api'
 
 repositories {
     jcenter()
@@ -30,3 +38,31 @@ idea.module {
     testOutputDir = file('idea-test-build')
 }
 
+bootRepackage {
+    mainClass = 'org.grpcvsrest.raggr.Application'
+}
+
+task buildDocker(type: DockerBuildImage) {
+    dependsOn bootRepackage
+    inputDir = project.projectDir
+    tag = 'restaggregator:latest'
+}
+
+task tagDocker(type: Exec) {
+    dependsOn buildDocker
+    commandLine 'docker', 'tag', 'restaggregator:latest', 'gcr.io/alien-fold-180922/restaggregator:latest'
+}
+
+task pushDocker(type: Exec) {
+    dependsOn tagDocker
+    commandLine 'gcloud', 'docker', '--', 'push', 'gcr.io/alien-fold-180922/restaggregator:latest'
+}
+
+task deploy(type: Exec) {
+    commandLine 'kubectl', 'create', '-f', 'k8s/rest-aggregator.yaml'
+}
+
+
+task undeploy(type: Exec) {
+    commandLine 'kubectl', 'delete', '-f', 'k8s/rest-aggregator.yaml'
+}
