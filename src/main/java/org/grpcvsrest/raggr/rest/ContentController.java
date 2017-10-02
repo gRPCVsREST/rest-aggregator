@@ -28,7 +28,8 @@ public class ContentController {
                 .body(new AggregatedContentResponse(
                         aggregatedContent.getId(),
                         aggregatedContent.getType(),
-                        aggregatedContent.getContent()));
+                        aggregatedContent.getContent(),
+                        "/content/"+(aggregatedContent.getId()+1)));
     }
 
 
