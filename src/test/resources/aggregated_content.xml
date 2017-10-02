@@ -1,0 +1,6 @@
+<AggregatedContentResponse>
+    <id>1</id>
+    <type>Pokemon</type>
+    <content>Pikachu</content>
+    <next_uri>/content/2</next_uri>
+</AggregatedContentResponse>

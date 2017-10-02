@@ -16,9 +16,7 @@ import java.io.IOException;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
 @RunWith(SpringRunner.class)
@@ -40,10 +38,29 @@ public class ContentControllerTest {
         recordExists();
 
         // when
-        mockMvc.perform(get("/content/1")
+        mockMvc.perform(
+                get("/content/1")
+                .contentType("application/json")
+                .accept("application/json")
         ) // then
                 .andExpect(status().is(200))
-                .andExpect(content().json(expectedContent()));
+                .andExpect(content().json(expectedJsonContent()));
+
+    }
+
+    @Test
+    public void testExistingContent_XML() throws Exception {
+        // given
+        recordExists();
+
+        // when
+        mockMvc.perform(
+                get("/content/1")
+                .contentType("application/xml")
+                .accept("application/xml")
+        ) // then
+                .andExpect(status().is(200))
+                .andExpect(content().xml(expectedXmlContent()));
 
     }
 
@@ -53,15 +70,25 @@ public class ContentControllerTest {
         recordMissing();
 
         // when
-        mockMvc.perform(get("/content/1")
+        mockMvc.perform(
+                get("/content/1")
+                .contentType("application/json")
+                .accept("application/json")
+
         ) // then
                 .andExpect(status().is(404));
 
     }
 
-    private String expectedContent() throws IOException {
+    private String expectedJsonContent() throws IOException {
         return Resources.toString(
                 Resources.getResource("aggregated_content.json"),
+                Charsets.UTF_8);
+    }
+
+    private String expectedXmlContent() throws IOException {
+        return Resources.toString(
+                Resources.getResource("aggregated_content.xml"),
                 Charsets.UTF_8);
     }
 

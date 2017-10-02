@@ -17,8 +17,17 @@ public class ContentController {
         this.aggregatingService = aggregatingService;
     }
 
-    @GetMapping("/content/{id}")
-    public ResponseEntity<AggregatedContentResponse> content(@PathVariable("id") int id) {
+
+    @GetMapping(value = "/content/{id}", consumes = "application/xml", produces = "application/xml")
+    public ResponseEntity<AggregatedContentResponse> contentXml(@PathVariable("id") int id) {
+        return content(id);
+    }
+    @GetMapping(value = "/content/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<AggregatedContentResponse> contentJson(@PathVariable("id") int id) {
+        return content(id);
+    }
+
+    private ResponseEntity<AggregatedContentResponse> content(@PathVariable("id") int id) {
         AggregatedContent aggregatedContent = aggregatingService.fetch(id);
         if (aggregatedContent == null) {
             throw new IllegalArgumentException("Content not found");
