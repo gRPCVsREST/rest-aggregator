@@ -4,6 +4,8 @@ metadata:
   name: rest-aggregator-deployment
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:
