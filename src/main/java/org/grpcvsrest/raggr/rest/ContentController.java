@@ -22,7 +22,7 @@ public class ContentController {
     public ResponseEntity<AggregatedContentResponse> contentXml(@PathVariable("id") int id) {
         return content(id);
     }
-    @GetMapping(value = "/content/{id}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/content/{id}", produces = "application/json")
     public ResponseEntity<AggregatedContentResponse> contentJson(@PathVariable("id") int id) {
         return content(id);
     }

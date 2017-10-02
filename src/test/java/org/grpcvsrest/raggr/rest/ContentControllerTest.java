@@ -40,6 +40,21 @@ public class ContentControllerTest {
         // when
         mockMvc.perform(
                 get("/content/1")
+        ) // then
+                .andExpect(status().is(200))
+                .andExpect(content().json(expectedJsonContent()));
+
+    }
+
+
+    @Test
+    public void testExistingContentJson() throws Exception {
+        // given
+        recordExists();
+
+        // when
+        mockMvc.perform(
+                get("/content/1")
                 .contentType("application/json")
                 .accept("application/json")
         ) // then
