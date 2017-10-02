@@ -1,11 +1,13 @@
 package org.grpcvsrest.raggr.datasource;
 
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Datastream {
 
     private final Datasource datasource;
 
-    private volatile Integer lastContentId = 0;
+    private volatile AtomicInteger lastContentId = new AtomicInteger(0);
     private volatile boolean done;
 
     public Datastream(Datasource datasource) {
@@ -17,7 +19,7 @@ public class Datastream {
             return null;
         }
 
-        int contentId = ++lastContentId;
+        int contentId = lastContentId.incrementAndGet();
 
         Content result = datasource.fetch(contentId);
         if (result.getNextId() == null) {
