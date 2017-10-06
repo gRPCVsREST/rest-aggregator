@@ -22,12 +22,12 @@ public class Datastream {
         int contentId = lastContentId.incrementAndGet();
 
         Content result = datasource.fetch(contentId);
-        if (result.getNextId() == null) {
+        if (result == null) {
             done = true;
         }
         return result;
-
     }
+
 
 
 }
