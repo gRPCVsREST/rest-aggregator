@@ -91,12 +91,13 @@ public class ContentControllerTest {
 
         // when
         mockMvc.perform(
-                get("/content/1")
+                get("/content/100")
                 .contentType("application/json")
                 .accept("application/json")
 
         ) // then
-                .andExpect(status().is(404));
+                .andExpect(status().is(200))
+                .andExpect(content().json(expectedJsonLastContent()));
 
     }
 
@@ -126,11 +127,13 @@ public class ContentControllerTest {
     }
 
     private void recordExists() {
+        when(aggregatingService.isLast(CONTENT_ID)).thenReturn(false);
         when(aggregatingService.fetch(CONTENT_ID))
                 .thenReturn(new AggregatedContent(CONTENT_ID, POKEMON, PIKACHU, ORIGINAL_ID));
     }
 
     private void lastRecordExists() {
+        when(aggregatingService.isLast(LAST_CONTENT_ID)).thenReturn(true);
         when(aggregatingService.fetch(LAST_CONTENT_ID))
                 .thenReturn(new AggregatedContent(LAST_CONTENT_ID, POKEMON, PIKACHU, ORIGINAL_ID));
     }

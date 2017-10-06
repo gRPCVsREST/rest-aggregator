@@ -33,6 +33,10 @@ public class AggregatingService {
         return streamA.isDone() && streamB.isDone();
     }
 
+    public boolean isLast(int id) {
+        return isDone() && id == repo.size();
+    }
+
     public AggregatedContent fetch(int id) {
         AggregatedContent cached = repo.find(id);
         if (cached != null) {
