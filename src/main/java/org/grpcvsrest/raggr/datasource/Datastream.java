@@ -8,10 +8,14 @@ public class Datastream {
     private final Datasource datasource;
 
     private volatile AtomicInteger lastContentId = new AtomicInteger(0);
-    private volatile boolean done;
+    private volatile boolean done = false;
 
     public Datastream(Datasource datasource) {
         this.datasource = datasource;
+    }
+
+    public boolean isDone() {
+        return done;
     }
 
     public Content next() {
@@ -26,8 +30,8 @@ public class Datastream {
             done = true;
         }
         return result;
-
     }
+
 
 
 }
