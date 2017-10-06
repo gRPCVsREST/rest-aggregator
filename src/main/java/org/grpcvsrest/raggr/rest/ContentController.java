@@ -38,7 +38,7 @@ public class ContentController {
                         aggregatedContent.getId(),
                         aggregatedContent.getType(),
                         aggregatedContent.getContent(),
-                        "/content/"+(aggregatedContent.getId()+1)));
+                        aggregatingService.isDone()? "/content/1": "/content/"+(aggregatedContent.getId()+1)));
     }
 
 

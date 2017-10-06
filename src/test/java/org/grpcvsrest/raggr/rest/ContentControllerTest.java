@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class ContentControllerTest {
     private static final int CONTENT_ID = 1;
+    private static final Integer LAST_CONTENT_ID = 100;
     private static final String POKEMON = "Pokemon";
     private static final String PIKACHU = "Pikachu";
     private static final int ORIGINAL_ID = 42;
@@ -35,6 +36,7 @@ public class ContentControllerTest {
     @Test
     public void testExistingContent() throws Exception {
         // given
+        notDone();
         recordExists();
 
         // when
@@ -50,6 +52,7 @@ public class ContentControllerTest {
     @Test
     public void testExistingContentJson() throws Exception {
         // given
+        notDone();
         recordExists();
 
         // when
@@ -66,6 +69,7 @@ public class ContentControllerTest {
     @Test
     public void testExistingContent_XML() throws Exception {
         // given
+        notDone();
         recordExists();
 
         // when
@@ -80,9 +84,10 @@ public class ContentControllerTest {
     }
 
     @Test
-    public void test404() throws Exception {
+    public void testLastRecord() throws Exception {
         // given
-        recordMissing();
+        done();
+        lastRecordExists();
 
         // when
         mockMvc.perform(
@@ -95,6 +100,11 @@ public class ContentControllerTest {
 
     }
 
+    private String expectedJsonLastContent() throws IOException {
+        return Resources.toString(
+                Resources.getResource("aggregated_last_content.json"),
+                Charsets.UTF_8);
+    }
     private String expectedJsonContent() throws IOException {
         return Resources.toString(
                 Resources.getResource("aggregated_content.json"),
@@ -107,13 +117,22 @@ public class ContentControllerTest {
                 Charsets.UTF_8);
     }
 
-    private void recordMissing() {
-        when(aggregatingService.fetch(CONTENT_ID)).thenReturn(null);
+    private void notDone() {
+        when(aggregatingService.isDone()).thenReturn(false);
+    }
+
+    private void done() {
+        when(aggregatingService.isDone()).thenReturn(true);
     }
 
     private void recordExists() {
         when(aggregatingService.fetch(CONTENT_ID))
                 .thenReturn(new AggregatedContent(CONTENT_ID, POKEMON, PIKACHU, ORIGINAL_ID));
+    }
+
+    private void lastRecordExists() {
+        when(aggregatingService.fetch(LAST_CONTENT_ID))
+                .thenReturn(new AggregatedContent(LAST_CONTENT_ID, POKEMON, PIKACHU, ORIGINAL_ID));
     }
 
 }

@@ -88,8 +88,26 @@ public class AggregatingServiceTest extends MockitoTest{
         assertThat(resultC).isNull();
     }
 
+    @Test
+    public void testFetch_BothStreamsDone() {
+        // given
+        streamADone();
+        streamBDone();
+
+        // when
+        AggregatedContent result = service.fetch(1);
+
+        // then
+        assertThat(result).isNull();
+    }
+
+
     private void streamADone() {
         doReturn(null).when(streamA).next();
+    }
+
+    private void streamBDone() {
+        doReturn(null).when(streamB).next();
     }
 
 
