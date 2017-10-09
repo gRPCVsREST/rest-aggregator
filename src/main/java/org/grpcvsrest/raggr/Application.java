@@ -2,6 +2,7 @@ package org.grpcvsrest.raggr;
 
 import org.grpcvsrest.raggr.datasource.Datasource;
 import org.grpcvsrest.raggr.datasource.Datastream;
+import org.grpcvsrest.raggr.service.IdMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -35,6 +36,13 @@ public class Application {
     @Bean("datastreamB")
     public Datastream datastreamB(@Qualifier("datasourceB") Datasource datasource) {
         return new Datastream(datasource);
+    }
+
+    @Bean
+    public IdMapper idMapper(
+            @Qualifier("datasourceA") Datasource a, @Qualifier("datasourceB") Datasource b,
+            @Value("${content_type.a}") String contentTypeA, @Value("${content_type.b}") String contentTypeB) {
+        return new IdMapper(contentTypeA, a.ids(), contentTypeB, b.ids());
     }
 
     public static void main(String[] args) {

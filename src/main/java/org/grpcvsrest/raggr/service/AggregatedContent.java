@@ -1,63 +1,57 @@
-package org.grpcvsrest.raggr.repo;
+package org.grpcvsrest.raggr.service;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 
-import java.util.Objects;
-
 public class AggregatedContent {
-    @JsonProperty("id")
     private final Integer id;
-    @JsonProperty("type")
     private final String type;
-    @JsonProperty("content")
     private final String content;
-    @JsonProperty("original_id")
     private final Integer originalId;
+    private final Integer nextId;
 
-    @JsonCreator
-    public AggregatedContent(
-            @JsonProperty("id") Integer id,
-            @JsonProperty("type") String type,
-            @JsonProperty("content") String content,
-            @JsonProperty("original_id") Integer originalId) {
+    public AggregatedContent(Integer id, String type, String content, Integer originalId, Integer nextId) {
         this.id = id;
+        this.type = type;
         this.content = content;
-        this.type= type;
         this.originalId = originalId;
+        this.nextId = nextId;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public String getContent() {
-        return content;
-    }
-
     public String getType() {
         return type;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public Integer getOriginalId() {
         return originalId;
     }
 
+    public Integer getNextId() {
+        return nextId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AggregatedContent)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         AggregatedContent that = (AggregatedContent) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(content, that.content) &&
-                Objects.equals(originalId, that.originalId);
+        return com.google.common.base.Objects.equal(id, that.id) &&
+                com.google.common.base.Objects.equal(type, that.type) &&
+                com.google.common.base.Objects.equal(content, that.content) &&
+                com.google.common.base.Objects.equal(originalId, that.originalId) &&
+                com.google.common.base.Objects.equal(nextId, that.nextId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, content, originalId);
+        return com.google.common.base.Objects.hashCode(id, type, content, originalId, nextId);
     }
 
     @Override
@@ -67,6 +61,7 @@ public class AggregatedContent {
                 .add("type", type)
                 .add("content", content)
                 .add("originalId", originalId)
+                .add("nextId", nextId)
                 .toString();
     }
 }

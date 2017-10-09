@@ -1,15 +1,15 @@
 package org.grpcvsrest.raggr.service;
 
+import com.google.common.collect.ImmutableMap;
 import org.grpcvsrest.raggr.MockitoTest;
 import org.grpcvsrest.raggr.datasource.Content;
-import org.grpcvsrest.raggr.datasource.Datastream;
-import org.grpcvsrest.raggr.repo.AggregatedContent;
+import org.grpcvsrest.raggr.datasource.Datasource;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 public class AggregatingServiceTest extends MockitoTest{
 
@@ -27,99 +27,44 @@ public class AggregatingServiceTest extends MockitoTest{
             null);
 
     @Mock
-    private Datastream streamA;
+    private Datasource sourceA;
     @Mock
-    private Datastream streamB;
+    private Datasource sourceB;
+    @Mock
+    private IdMapper idMapper;
 
     private AggregatingService service;
 
     @Before
     public void setup() {
-        service = new AggregatingService(streamA, streamB, "A", "B");
+        service = new AggregatingService(sourceA, sourceB, "A", idMapper);
     }
 
     @Test
-    public void testFetch_BothStreamsActive() {
+    public void testFetch() {
         // given
-        streamAActive();
-        streamBActive();
-
+        twoItems();
         // when
         AggregatedContent resultA = service.fetch(1);
         AggregatedContent resultB = service.fetch(2);
         AggregatedContent resultC = service.fetch(3);
 
         // then
-        assertThat(resultA).isEqualTo(new AggregatedContent(1, "A", CONTENT_STRING_A, CONTENT_ID_A));
-        assertThat(resultB).isEqualTo(new AggregatedContent(2, "B", CONTENT_STRING_B, CONTENT_ID_B));
+        assertThat(resultA).isEqualTo(new AggregatedContent(1, "A", CONTENT_STRING_A, CONTENT_ID_A, 2));
+        assertThat(resultB).isEqualTo(new AggregatedContent(2, "B", CONTENT_STRING_B, CONTENT_ID_B, null));
         assertThat(resultC).isNull();
     }
 
-    @Test
-    public void testFetch_BothStreamsActive_SkipOneElement() {
-        // given
-        streamAActive();
-        streamBActive();
+    private void twoItems() {
+        when(idMapper.getMap()).thenReturn(ImmutableMap.of(
+                1, new IdMapper.CategoryId("A", CONTENT_ID_A),
+                2, new IdMapper.CategoryId("B", CONTENT_ID_B)
+        ));
 
-        // when
-        AggregatedContent resultA = service.fetch(2);
-        AggregatedContent resultB = service.fetch(3);
-
-        // then
-        assertThat(resultA).isEqualTo(new AggregatedContent(2, "B", CONTENT_STRING_B, CONTENT_ID_B));
-        assertThat(resultB).isNull();
+        when(sourceA.fetch(CONTENT_ID_A)).thenReturn(CONTENT_A);
+        when(sourceB.fetch(CONTENT_ID_B)).thenReturn(CONTENT_B);
     }
 
 
-    @Test
-    public void testFetch_OnlyOneStreamActive() {
-        // given
-        streamADone();
-        streamBActive();
 
-        // when
-        AggregatedContent resultA = service.fetch(1);
-        AggregatedContent resultB = service.fetch(2);
-        AggregatedContent resultC = service.fetch(3);
-
-        // then
-        assertThat(resultA).isEqualTo(new AggregatedContent(1, "B", CONTENT_STRING_B, CONTENT_ID_B));
-        assertThat(resultB).isNull();
-        assertThat(resultC).isNull();
-    }
-
-    @Test
-    public void testFetch_BothStreamsDone() {
-        // given
-        streamADone();
-        streamBDone();
-
-        // when
-        AggregatedContent result = service.fetch(1);
-
-        // then
-        assertThat(result).isNull();
-    }
-
-
-    private void streamADone() {
-        doReturn(null).when(streamA).next();
-    }
-
-    private void streamBDone() {
-        doReturn(null).when(streamB).next();
-    }
-
-
-    private void streamAActive() {
-        doReturn(CONTENT_A).doReturn(null)
-                .when(streamA).next();
-
-    }
-
-    private void streamBActive() {
-
-        doReturn(CONTENT_B).doReturn(null)
-                .when(streamB).next();
-    }
 }

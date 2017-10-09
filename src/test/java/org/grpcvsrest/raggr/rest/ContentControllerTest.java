@@ -2,8 +2,9 @@ package org.grpcvsrest.raggr.rest;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import org.grpcvsrest.raggr.repo.AggregatedContent;
+import org.grpcvsrest.raggr.service.AggregatedContent;
 import org.grpcvsrest.raggr.service.AggregatingService;
+import org.grpcvsrest.raggr.service.IdMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class ContentControllerTest {
 
     @MockBean
     private AggregatingService aggregatingService;
+    @MockBean
+    private IdMapper idMapper;
 
     @Autowired
     private MockMvc mockMvc;
@@ -36,7 +39,6 @@ public class ContentControllerTest {
     @Test
     public void testExistingContent() throws Exception {
         // given
-        notDone();
         recordExists();
 
         // when
@@ -52,7 +54,6 @@ public class ContentControllerTest {
     @Test
     public void testExistingContentJson() throws Exception {
         // given
-        notDone();
         recordExists();
 
         // when
@@ -69,7 +70,6 @@ public class ContentControllerTest {
     @Test
     public void testExistingContent_XML() throws Exception {
         // given
-        notDone();
         recordExists();
 
         // when
@@ -86,7 +86,6 @@ public class ContentControllerTest {
     @Test
     public void testLastRecord() throws Exception {
         // given
-        done();
         lastRecordExists();
 
         // when
@@ -118,24 +117,13 @@ public class ContentControllerTest {
                 Charsets.UTF_8);
     }
 
-    private void notDone() {
-        when(aggregatingService.isDone()).thenReturn(false);
-    }
-
-    private void done() {
-        when(aggregatingService.isDone()).thenReturn(true);
-    }
-
     private void recordExists() {
-        when(aggregatingService.isLast(CONTENT_ID)).thenReturn(false);
         when(aggregatingService.fetch(CONTENT_ID))
-                .thenReturn(new AggregatedContent(CONTENT_ID, POKEMON, PIKACHU, ORIGINAL_ID));
+                .thenReturn(new AggregatedContent(CONTENT_ID, POKEMON, PIKACHU, ORIGINAL_ID, CONTENT_ID + 1));
     }
 
     private void lastRecordExists() {
-        when(aggregatingService.isLast(LAST_CONTENT_ID)).thenReturn(true);
         when(aggregatingService.fetch(LAST_CONTENT_ID))
-                .thenReturn(new AggregatedContent(LAST_CONTENT_ID, POKEMON, PIKACHU, ORIGINAL_ID));
+                .thenReturn(new AggregatedContent(LAST_CONTENT_ID, POKEMON, PIKACHU, ORIGINAL_ID, null));
     }
-
 }

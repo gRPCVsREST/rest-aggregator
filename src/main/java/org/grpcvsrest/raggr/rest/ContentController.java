@@ -1,6 +1,6 @@
 package org.grpcvsrest.raggr.rest;
 
-import org.grpcvsrest.raggr.repo.AggregatedContent;
+import org.grpcvsrest.raggr.service.AggregatedContent;
 import org.grpcvsrest.raggr.service.AggregatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +38,7 @@ public class ContentController {
                         aggregatedContent.getId(),
                         aggregatedContent.getType(),
                         aggregatedContent.getContent(),
-                        aggregatingService.isLast(id) ? "/content/1": "/content/"+(aggregatedContent.getId()+1)));
+                        aggregatedContent.getNextId() == null ? "/content/1" : "/content/"+aggregatedContent.getNextId()));
     }
 
 

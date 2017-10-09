@@ -2,6 +2,9 @@ package org.grpcvsrest.raggr.service;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import org.grpcvsrest.raggr.Application;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,6 +15,8 @@ import java.util.stream.Stream;
 import static com.google.common.primitives.Ints.max;
 
 public class IdMapper {
+
+    private final static Logger LOG = LoggerFactory.getLogger(Application.class);
 
     private final Map<Integer, CategoryId> map;
 
@@ -24,11 +29,13 @@ public class IdMapper {
 
         }
         map = Collections.unmodifiableMap(interim);
+
+        LOG.info("Initialized ID mapping {}", map);
     }
 
-    private int putIfPresent(String categoryA, List<Integer> idsA, Map<Integer, CategoryId> interim, int j, int i) {
-        if (i < idsA.size()) {
-            interim.put(j, new CategoryId(categoryA, idsA.get(i)));
+    private int putIfPresent(String category, List<Integer> ids, Map<Integer, CategoryId> interim, int j, int i) {
+        if (i < ids.size()) {
+            interim.put(j, new CategoryId(category, ids.get(i)));
             j++;
         }
         return j;

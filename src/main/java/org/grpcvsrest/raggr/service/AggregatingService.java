@@ -1,9 +1,7 @@
 package org.grpcvsrest.raggr.service;
 
 import org.grpcvsrest.raggr.datasource.Content;
-import org.grpcvsrest.raggr.datasource.Datastream;
-import org.grpcvsrest.raggr.repo.AggregatedContent;
-import org.grpcvsrest.raggr.repo.InMemoryAggregatedContentRepo;
+import org.grpcvsrest.raggr.datasource.Datasource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,56 +9,42 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AggregatingService {
-    private final Datastream streamA;
-    private final Datastream streamB;
+    private final Datasource sourceA;
+    private final Datasource sourceB;
     private final String categoryA;
-    private final String categoryB;
-    private final InMemoryAggregatedContentRepo repo = new InMemoryAggregatedContentRepo();
+    private final IdMapper idMapper;
 
     @Autowired
     public AggregatingService(
-            @Qualifier("datastreamA") Datastream streamA,
-            @Qualifier("datastreamB") Datastream streamB,
+            @Qualifier("datasourceA") Datasource sourceA,
+            @Qualifier("datasourceB") Datasource sourceB,
             @Value("${content_type.a}") String categoryA,
-            @Value("${content_type.b}") String categoryB) {
-        this.streamA = streamA;
-        this.streamB = streamB;
+            IdMapper idMapper) {
+        this.sourceA = sourceA;
+        this.sourceB = sourceB;
         this.categoryA = categoryA;
-        this.categoryB = categoryB;
-    }
-
-    public boolean isDone() {
-        return streamA.isDone() && streamB.isDone();
-    }
-
-    public boolean isLast(int id) {
-        return isDone() && id == repo.size();
+        this.idMapper = idMapper;
     }
 
     public AggregatedContent fetch(int id) {
-        AggregatedContent cached = repo.find(id);
-        if (cached != null) {
-            return cached;
+        IdMapper.CategoryId categoryId = idMapper.getMap().get(id);
+        if (categoryId == null) {
+            return null;
         }
 
-        AggregatedContent saved = null;
-        Content resultA = streamA.next();
-        Content resultB = streamB.next();
-
-        while ( saved == null &&  (resultA != null || resultB != null)) {
-            if (resultA != null) {
-                repo.save(new AggregatedContent(null, categoryA, resultA.getContent(), resultA.getId()));
-            }
-            if (resultB != null) {
-                repo.save(new AggregatedContent(null, categoryB, resultB.getContent(), resultB.getId()));
-            }
-            saved = repo.find(id);
-
-            resultA = streamA.next();
-            resultB = streamB.next();
-
+        Content originalContent;
+        if (categoryId.getCategory().equals(categoryA)) {
+            originalContent = sourceA.fetch(categoryId.getOriginalId());
+        } else {
+            originalContent = sourceB.fetch(categoryId.getOriginalId());
         }
-        return saved;
+        Integer nextId = id < idMapper.getMap().size() ?  id + 1: null;
+        return new AggregatedContent(
+                id,
+                categoryId.getCategory(),
+                originalContent.getContent(),
+                categoryId.getOriginalId(),
+                nextId);
 
     }
 }
