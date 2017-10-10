@@ -6,22 +6,32 @@ buildscript {
     }
     dependencies {
         classpath 'com.bmuschko:gradle-docker-plugin:3.1.0'
+        classpath "io.spring.gradle:dependency-management-plugin:0.5.2.RELEASE"
     }
-
 }
+
 plugins {
     id 'java'
     id 'idea'
     id 'org.springframework.boot' version '1.5.6.RELEASE'
 }
-
+apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.bmuschko.docker-remote-api'
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-sleuth:1.2.5.RELEASE'
+    }
+}
 
 repositories {
     jcenter()
 }
 
 dependencies {
+    compile 'org.springframework.cloud:spring-cloud-starter-sleuth'
+    compile 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
+
     compile 'org.apache.commons:commons-lang3:3.6'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'com.google.guava:guava:23.0'
