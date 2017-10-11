@@ -33,7 +33,7 @@ kind: Service
 metadata:
   name: rest-aggregator-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: rest-aggregator
   ports:
