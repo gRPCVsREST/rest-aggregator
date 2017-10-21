@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.google.common.primitives.Ints.max;
@@ -21,24 +23,21 @@ public class IdMapper {
     private final Map<Integer, CategoryId> map;
 
     public IdMapper(String categoryA, List<Integer> idsA, String categoryB, List<Integer> idsB) {
-        Map<Integer, CategoryId> interim = new HashMap<>();
-        int j=1;
-        for (int i = 0; i < max(idsA.size(), idsB.size()); i++) {
-            j = putIfPresent(categoryA, idsA, interim, j, i);
-            j = putIfPresent(categoryB, idsB, interim, j, i);
+        List<CategoryId> interimCategories =
+                Stream.concat(
+                        idsA.stream().map(i -> new CategoryId(categoryA, i)),
+                        idsB.stream().map(i -> new CategoryId(categoryB, i))
+                ).collect(Collectors.toList());
 
-        }
+        Collections.shuffle(interimCategories);
+
+        Map<Integer, CategoryId> interim = IntStream.range(0, interimCategories.size())
+                .boxed()
+                .collect(Collectors.toMap(i -> i+1, interimCategories::get));
+
         map = Collections.unmodifiableMap(interim);
 
         LOG.info("Initialized ID mapping {}", map);
-    }
-
-    private int putIfPresent(String category, List<Integer> ids, Map<Integer, CategoryId> interim, int j, int i) {
-        if (i < ids.size()) {
-            interim.put(j, new CategoryId(category, ids.get(i)));
-            j++;
-        }
-        return j;
     }
 
     public Map<Integer, CategoryId> getMap() {

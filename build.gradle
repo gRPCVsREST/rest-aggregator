@@ -29,8 +29,8 @@ repositories {
 }
 
 dependencies {
-    compile 'org.springframework.cloud:spring-cloud-starter-sleuth'
     compile 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
+    compile 'org.springframework.cloud:spring-cloud-starter-sleuth'
 
     compile 'org.apache.commons:commons-lang3:3.6'
     compile 'org.springframework.boot:spring-boot-starter-web'
