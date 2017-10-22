@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.sleuth.SpanAdjuster;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,6 +18,12 @@ public class Application {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
+
+    @Bean
+    public SpanAdjuster customSpanAdjuster() {
+        return span -> span.toBuilder().name("#rest-aggregator/" + span.getName().replace("http:/", "")).build();
+    }
+
 
     @Bean("datasourceA")
     public Datasource datasourceA(RestTemplate restTemplate, @Value("${datasource.a.url}") String url) {

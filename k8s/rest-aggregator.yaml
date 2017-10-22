@@ -24,9 +24,14 @@ spec:
             - containerPort: 8080
           env:
             - name: datasource_a_url
-              value: "http://rest-pokemon-content-service:8080"
+              value: "http://rest-zrada-content-service:8080"
             - name: datasource_b_url
-              value: "http://rest-bigdata-content-service:8080"
+              value: "http://rest-peremoga-content-service:8080"
+            - name: content_type_a
+              value: "ZRADA"
+            - name: content_type_b
+              value: "PEREMOGA"
+
 ---
 apiVersion: v1
 kind: Service
